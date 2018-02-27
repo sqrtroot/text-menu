@@ -23,6 +23,9 @@
 //	SOFTWARE.
 //
 //===----------------------------------------------------------------------===//
+/// \file
+/// Declarations @ref Window options class Option
+//===----------------------------------------------------------------------===//
 
 #ifndef TEXT_MENU_OPTION_H
 #define TEXT_MENU_OPTION_H
@@ -31,9 +34,18 @@
 #include <utility>
 #include "Menu.h"
 
+/**
+ * Option for @ref Window, used to pair a callback with some text
+ */
 struct Option {
     std::function<void(VirtualMenu *)> callback;
     const char * text;
+
+    /**
+     * Create a Option for a @ref Window
+     * @param callback Function to be called when option is selected
+     * @param text Name of the option to be displayed
+     */
     Option(std::function<void(VirtualMenu *)> callback, const char *text) : callback(std::move(callback)), text(text) {}
 };
 

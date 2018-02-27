@@ -23,6 +23,9 @@
 //  SOFTWARE.
 //
 //===----------------------------------------------------------------------===//
+/// \file
+/// Declarations for Window class and helper function
+//===----------------------------------------------------------------------===//
 
 #ifndef TEXT_MENU_WINDOW_H
 #define TEXT_MENU_WINDOW_H
@@ -32,15 +35,29 @@
 #include <complex>
 #include "Option.h"
 
+/**
+ * One window of a menu, holds some @ref Option's
+ * @tparam size Amount of options in this Window
+ */
 template<size_t size>
 struct Window {
     const char * title;
     const char * footer;
     std::array<Option, size> options;
 
+    /**
+     * Create a window
+     * For easier use, use @ref make_window
+     * @param title Title of the window printed at the top
+     * @param footer Text to print at bottom of window
+     * @param options Array of possible options of window
+     */
     Window(const char *title, const char *footer, const std::array<Option, size> &options) : title(title),
                                                                                              footer(footer),
                                                                                              options(options) {}
+    /**
+     * Print all options of this window
+     */
     void print() {
         std::cout << title << "\n";
         std::cout << "--------------------------------------------" << "\n";
@@ -51,6 +68,12 @@ struct Window {
         std::cout << footer << "\n";
     }
 
+    /**
+     * Call callback of option specified by i
+     * @param i Option index (0 based) to call
+     * The 0 based index differs from the 1 based index used in printing the menu
+     * @param menu Pointer to the menu that handles this window
+     */
     void handle(size_t i, VirtualMenu * menu){
         if(i >= size){
             std::cout << "Invalid Option\n";
@@ -60,6 +83,15 @@ struct Window {
     }
 };
 
+/**
+ * Generate a Window from a list of options.
+ * Easyier than directly using the constructor of Window
+ * @tparam options List of options, should only be Option type
+ * @param title Title of window
+ * @param footer Footer of window
+ * @param o parameter list of options for this window
+ * @return Window with template parameter size as the amount of options
+ */
 template<typename ...options>
 constexpr auto make_window(const char * title, const char * footer, options... o) -> Window<sizeof...(options)>{
     return Window<sizeof...(options)>(title, footer, {o...});
